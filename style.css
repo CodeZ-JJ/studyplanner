@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { font-family: 'Inter', system-ui, sans-serif; }
+
+.nav-link { transition: all 0.3s ease; }
+.nav-link.active { background-color: #4f46e5; color: white !important; font-weight: 600; }
+
+.task-card { transition: all 0.3s ease; }
+.task-card:hover { transform: translateY(-6px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+
+.overdue { border-left: 6px solid #dc2626 !important; }
+.overdue .due-date { color: #dc2626; font-weight: 600; }
+
+.completed { opacity: 0.75; text-decoration: line-through; }
