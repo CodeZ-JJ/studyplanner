@@ -1,3 +1,5 @@
+// ==================== USER & DATA ====================
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 let tasks = JSON.parse(localStorage.getItem('studyplan_tasks')) || [
   { id: 1, title: "Complete Research Methodology Chapter 3", deadline: "2026-04-12", priority: "High", category: "Assignment", completed: false },
   { id: 2, title: "Solve 50 Calculus past questions", deadline: "2026-04-10", priority: "Medium", category: "Revision", completed: true },
@@ -7,15 +9,70 @@ let tasks = JSON.parse(localStorage.getItem('studyplan_tasks')) || [
 
 let currentView = 'dashboard';
 let currentEditId = null;
-let searchTerm = '';
-let currentFilter = 'all';
 
-// Navigation
+// ==================== AUTH FUNCTIONS ====================
+function showLogin() {
+  document.getElementById('loginForm').classList.remove('hidden');
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginTab').classList.add('border-b-2', 'border-indigo-600', 'text-indigo-600');
+  document.getElementById('registerTab').classList.remove('border-b-2', 'border-indigo-600', 'text-indigo-600');
+}
+
+function showRegister() {
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+  document.getElementById('registerTab').classList.add('border-b-2', 'border-indigo-600', 'text-indigo-600');
+  document.getElementById('loginTab').classList.remove('border-b-2', 'border-indigo-600', 'text-indigo-600');
+}
+
+function registerUser() {
+  const fullName = document.getElementById('regFullName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value.trim();
+
+  if (!fullName || !email || !password) {
+    alert("All fields are required!");
+    return;
+  }
+
+  // Save user
+  const user = { fullName, email, password };
+  localStorage.setItem('currentUser', JSON.stringify(user));
+  
+  alert("Account created successfully! You can now login.");
+  showLogin(); // Switch back to login tab
+}
+
+function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+
+  const savedUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (savedUser && savedUser.email === email && savedUser.password === password) {
+    currentUser = savedUser;
+    document.getElementById('authPage').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    document.getElementById('userName').textContent = currentUser.fullName.split(' ')[0];
+    navigate('dashboard');
+  } else if (email === "justice@student.edu.ng" && password === "123456") {
+    // Demo login
+    currentUser = { fullName: "Justice", email: email };
+    document.getElementById('authPage').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    document.getElementById('userName').textContent = "Justice";
+    navigate('dashboard');
+  } else {
+    alert("Invalid email or password!");
+  }
+}
+
+// ==================== NAVIGATION ====================
 function navigate(view) {
   currentView = view;
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  document.querySelectorAll('.nav-link')[['dashboard','today','schedule','all'].indexOf(view)].classList.add('active');
-  
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  document.getElementById(`nav-${view}`).classList.add('active');
+
   document.getElementById('pageTitle').textContent = 
     view === 'dashboard' ? 'Dashboard' :
     view === 'today' ? "Today's Tasks" :
@@ -24,13 +81,7 @@ function navigate(view) {
   renderMainContent();
 }
 
-function login() {
-  document.getElementById('loginPage').classList.add('hidden');
-  document.getElementById('mainApp').classList.remove('hidden');
-  renderMainContent();
-}
-
-// Render Main Content
+// ==================== RENDER MAIN CONTENT ====================
 function renderMainContent() {
   const content = document.getElementById('mainContent');
   content.innerHTML = '';
@@ -38,33 +89,53 @@ function renderMainContent() {
   if (currentView === 'dashboard') renderDashboard(content);
   else if (currentView === 'today') renderTaskView(content, true);
   else if (currentView === 'schedule') renderSchedule(content);
-  else renderTaskView(content, false);
+  else if (currentView === 'all') renderTaskView(content, false);
 }
 
-// Dashboard
-function renderDashboard(container) { /* Same as previous version - kept clean */ 
-  // (I'll keep it short here - you can copy from previous message if needed)
+// ==================== DASHBOARD ====================
+function renderDashboard(container) {
   const total = tasks.length;
   const completed = tasks.filter(t => t.completed).length;
   const progress = total ? Math.round((completed / total) * 100) : 0;
 
   container.innerHTML = `
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl"><p class="text-gray-500">Total</p><p class="text-5xl font-bold">${total}</p></div>
-      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl"><p class="text-gray-500">Completed</p><p class="text-5xl font-bold text-green-600">${completed}</p></div>
-      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl"><p class="text-gray-500">Pending</p><p class="text-5xl font-bold text-orange-600">${total-completed}</p></div>
-      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl"><p class="text-gray-500">Progress</p><p class="text-5xl font-bold">${progress}%</p></div>
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 dark:text-gray-400">Total Tasks</p>
+        <p class="text-5xl font-bold mt-2">${total}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 dark:text-gray-400">Completed</p>
+        <p class="text-5xl font-bold mt-2 text-green-600">${completed}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 dark:text-gray-400">Pending</p>
+        <p class="text-5xl font-bold mt-2 text-orange-600">${total - completed}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
+        <p class="text-gray-500 dark:text-gray-400">Progress</p>
+        <p class="text-5xl font-bold mt-2">${progress}%</p>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full mt-4">
+          <div class="h-3 bg-indigo-600 rounded-full" style="width: ${progress}%"></div>
+        </div>
+      </div>
     </div>
-    <div class="flex justify-between mb-6"><h2 class="text-2xl font-semibold">Recent Tasks</h2>
-      <button onclick="showAddModal()" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl">+ New Task</button>
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold">Recent Tasks</h2>
+      <button onclick="showAddModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-medium">
+        <i class="fas fa-plus"></i> New Task
+      </button>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="recent"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="recentTasks"></div>
   `;
-  const recent = document.getElementById('recent');
-  tasks.slice(0,6).forEach(t => renderTaskCard(t, recent));
+
+  const recentContainer = document.getElementById('recentTasks');
+  tasks.slice(0, 6).forEach(task => renderTaskCard(task, recentContainer));
 }
 
-// Weekly Schedule View
+// (The rest of the functions - renderSchedule, renderTaskView, renderTaskCard, modal functions, etc. are the same as before)
+
 function renderSchedule(container) {
   const today = new Date();
   let html = `<h2 class="text-2xl font-semibold mb-6">Weekly Schedule</h2><div class="grid grid-cols-7 gap-4">`;
@@ -76,14 +147,14 @@ function renderSchedule(container) {
     const dayTasks = tasks.filter(t => t.deadline === dateStr);
 
     html += `
-      <div class="bg-white dark:bg-gray-900 rounded-3xl p-4">
+      <div class="bg-white dark:bg-gray-900 rounded-3xl p-5">
         <p class="font-medium text-center">${date.toLocaleDateString('en-US', {weekday:'short'})}</p>
         <p class="text-center text-sm text-gray-500">${date.getDate()}</p>
-        <div class="mt-4 space-y-3 min-h-[300px]">
+        <div class="mt-6 space-y-3 min-h-[280px]">
           ${dayTasks.length ? dayTasks.map(task => `
-            <div onclick="editTask(${task.id})" class="text-xs p-3 rounded-2xl bg-gray-50 dark:bg-gray-800 cursor-pointer ${task.completed ? 'line-through opacity-60' : ''}">
-              ${task.title.substring(0,35)}...
-            </div>`).join('') : '<p class="text-gray-400 text-center text-xs py-8">No tasks</p>'}
+            <div onclick="editTask(${task.id})" class="text-sm p-3 rounded-2xl bg-gray-50 dark:bg-gray-800 cursor-pointer ${task.completed ? 'line-through opacity-60' : ''}">
+              ${task.title}
+            </div>`).join('') : '<p class="text-gray-400 text-center py-10">No tasks this day</p>'}
         </div>
       </div>`;
   }
@@ -91,79 +162,65 @@ function renderSchedule(container) {
   container.innerHTML = html;
 }
 
-// Task View (Today & All)
 function renderTaskView(container, todayOnly) {
-  let filtered = tasks;
-
+  let filteredTasks = tasks;
   if (todayOnly) {
     const today = new Date().toISOString().split('T')[0];
-    filtered = tasks.filter(t => t.deadline === today);
+    filteredTasks = tasks.filter(t => t.deadline === today);
   }
 
-  // Search & Filter UI
   container.innerHTML = `
-    <div class="flex flex-wrap gap-4 mb-6">
+    <div class="flex flex-wrap gap-4 mb-8">
       <input id="searchInput" onkeyup="handleSearch()" type="text" placeholder="Search tasks..." 
-             class="flex-1 px-5 py-3 rounded-2xl border focus:border-indigo-500">
-      <select onchange="handleFilter(this.value)" class="px-5 py-3 rounded-2xl border">
+             class="flex-1 px-5 py-3 rounded-2xl border dark:border-gray-700 focus:border-indigo-500 outline-none">
+      <select onchange="handleFilter(this.value)" class="px-5 py-3 rounded-2xl border dark:border-gray-700 focus:border-indigo-500 outline-none">
         <option value="all">All Tasks</option>
         <option value="pending">Pending</option>
         <option value="completed">Completed</option>
         <option value="overdue">Overdue</option>
         <option value="high">High Priority</option>
       </select>
-      <button onclick="showAddModal()" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl">+ New Task</button>
+      <button onclick="showAddModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl flex items-center gap-2">
+        <i class="fas fa-plus"></i> New Task
+      </button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="taskGrid"></div>
   `;
 
   const grid = document.getElementById('taskGrid');
-  filtered.forEach(task => renderTaskCard(task, grid));
+  filteredTasks.forEach(task => renderTaskCard(task, grid));
 }
 
-// Render Task Card with Overdue + Category
 function renderTaskCard(task, container) {
-  const isOverdue = !task.completed && new Date(task.deadline) < new Date(new Date().toISOString().split('T')[0]);
-  
+  const todayStr = new Date().toISOString().split('T')[0];
+  const isOverdue = !task.completed && task.deadline < todayStr;
+
   const card = document.createElement('div');
-  card.className = `task-card bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm ${isOverdue ? 'overdue' : `priority-${task.priority.toLowerCase()}`}`;
-  
+  card.className = `task-card bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border-l-4 
+    ${isOverdue ? 'border-red-500' : task.priority === 'High' ? 'border-red-500' : task.priority === 'Medium' ? 'border-orange-500' : 'border-green-500'}`;
+
   card.innerHTML = `
     <div class="flex justify-between items-start">
-      <div>
-        <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800">${task.category}</span>
-        <h3 class="font-semibold mt-3 ${task.completed ? 'completed' : ''}">${task.title}</h3>
-      </div>
-      ${isOverdue ? '<i class="fas fa-exclamation-triangle text-red-500"></i>' : ''}
+      <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800">${task.category}</span>
+      ${isOverdue ? `<i class="fas fa-exclamation-triangle text-red-500"></i>` : ''}
     </div>
-    <p class="due-date text-sm mt-4 ${isOverdue ? 'text-red-600' : 'text-gray-500'}">
+    <h3 class="font-semibold text-lg mt-4 ${task.completed ? 'line-through text-gray-500' : ''}">${task.title}</h3>
+    <p class="text-sm mt-3 ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-500'}">
       Due: ${new Date(task.deadline).toLocaleDateString('en-GB')}
     </p>
-    
     <div class="mt-6 flex gap-3">
-      <button onclick="toggleComplete(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl ${task.completed ? 'bg-gray-200' : 'bg-green-600 text-white'}">
+      <button onclick="toggleComplete(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl ${task.completed ? 'bg-gray-200 dark:bg-gray-700' : 'bg-green-600 text-white hover:bg-green-700'}">
         ${task.completed ? '✓ Completed' : 'Mark Done'}
       </button>
-      <button onclick="editTask(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl border">Edit</button>
-      <button onclick="deleteTask(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl text-red-600 border border-red-200">Delete</button>
+      <button onclick="editTask(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl border border-gray-300 dark:border-gray-600">Edit</button>
+      <button onclick="deleteTask(${task.id}); event.stopImmediatePropagation()" class="flex-1 py-3 rounded-2xl text-red-600 border border-red-200 hover:bg-red-50">Delete</button>
     </div>
   `;
   container.appendChild(card);
 }
 
-// Search & Filter Handlers
-function handleSearch() {
-  searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  renderMainContent();
-}
-
-function handleFilter(filter) {
-  currentFilter = filter;
-  renderMainContent();
-}
-
-// Modal, Save, Edit, Delete, etc. (same logic as before, just with category added)
-function showAddModal() {
+// Modal, Save, Edit, Toggle, Delete functions (same as before)
+function showAddModal() { /* same as previous */ 
   currentEditId = null;
   document.getElementById('modalTitle').textContent = 'Add New Task';
   document.getElementById('taskTitle').value = '';
@@ -173,17 +230,24 @@ function showAddModal() {
   document.getElementById('taskModal').classList.remove('hidden');
 }
 
-function saveTask() {
+function closeModal() {
+  document.getElementById('taskModal').classList.add('hidden');
+}
+
+function saveTask() { /* same logic as before */ 
   const title = document.getElementById('taskTitle').value.trim();
   const deadline = document.getElementById('taskDeadline').value;
   const priority = document.getElementById('taskPriority').value;
   const category = document.getElementById('taskCategory').value;
 
-  if (!title || !deadline) return alert("Title and Deadline required!");
+  if (!title || !deadline) {
+    alert("Title and Deadline are required!");
+    return;
+  }
 
   if (currentEditId) {
     const task = tasks.find(t => t.id === currentEditId);
-    Object.assign(task, {title, deadline, priority, category});
+    if (task) Object.assign(task, {title, deadline, priority, category});
   } else {
     tasks.push({ id: Date.now(), title, deadline, priority, category, completed: false });
   }
@@ -193,7 +257,7 @@ function saveTask() {
   renderMainContent();
 }
 
-function editTask(id) {
+function editTask(id) { /* same */ 
   const task = tasks.find(t => t.id === id);
   if (!task) return;
   currentEditId = id;
@@ -201,36 +265,43 @@ function editTask(id) {
   document.getElementById('taskTitle').value = task.title;
   document.getElementById('taskDeadline').value = task.deadline;
   document.getElementById('taskPriority').value = task.priority;
-  document.getElementById('taskCategory').value = task.category || 'Other';
+  document.getElementById('taskCategory').value = task.category;
   document.getElementById('taskModal').classList.remove('hidden');
 }
 
 function toggleComplete(id) {
-  tasks = tasks.map(t => t.id === id ? {...t, completed: !t.completed} : t);
+  tasks = tasks.map(task => task.id === id ? {...task, completed: !task.completed} : task);
   localStorage.setItem('studyplan_tasks', JSON.stringify(tasks));
   renderMainContent();
 }
 
 function deleteTask(id) {
-  if (confirm("Delete this task?")) {
-    tasks = tasks.filter(t => t.id !== id);
+  if (confirm("Are you sure you want to delete this task?")) {
+    tasks = tasks.filter(task => task.id !== id);
     localStorage.setItem('studyplan_tasks', JSON.stringify(tasks));
     renderMainContent();
   }
 }
 
-function closeModal() {
-  document.getElementById('taskModal').classList.add('hidden');
-}
+function handleSearch() { renderMainContent(); }
+function handleFilter() { renderMainContent(); }
 
+// ==================== DARK MODE ====================
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
+  localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
 }
 
+// ==================== STREAK ====================
 function updateStreak() {
-  document.getElementById('streak').textContent = "9 days 🔥";
+  const streakEl = document.getElementById('streak');
+  if (streakEl) streakEl.textContent = "9 days 🔥";
 }
 
+// ==================== INITIALIZE ====================
 window.onload = () => {
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.documentElement.classList.add('dark');
+  }
   updateStreak();
 };
