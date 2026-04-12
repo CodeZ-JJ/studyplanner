@@ -29,26 +29,22 @@ function registerUser() {
   const fullName = document.getElementById('regFullName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value.trim();
-
   if (!fullName || !email || !password) {
     alert("All fields are required!");
     return;
   }
-
-  // Save user
   const user = { fullName, email, password };
   localStorage.setItem('currentUser', JSON.stringify(user));
-  
+ 
   alert("Account created successfully! You can now login.");
-  showLogin(); // Switch back to login tab
+  showLogin();
 }
 
 function login() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
-
   const savedUser = JSON.parse(localStorage.getItem('currentUser'));
-
+  
   if (savedUser && savedUser.email === email && savedUser.password === password) {
     currentUser = savedUser;
     document.getElementById('authPage').classList.add('hidden');
@@ -56,7 +52,6 @@ function login() {
     document.getElementById('userName').textContent = currentUser.fullName.split(' ')[0];
     navigate('dashboard');
   } else if (email === "justice@student.edu.ng" && password === "123456") {
-    // Demo login
     currentUser = { fullName: "Justice", email: email };
     document.getElementById('authPage').classList.add('hidden');
     document.getElementById('mainApp').classList.remove('hidden');
@@ -72,12 +67,10 @@ function navigate(view) {
   currentView = view;
   document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
   document.getElementById(`nav-${view}`).classList.add('active');
-
-  document.getElementById('pageTitle').textContent = 
+  document.getElementById('pageTitle').textContent =
     view === 'dashboard' ? 'Dashboard' :
     view === 'today' ? "Today's Tasks" :
     view === 'schedule' ? 'Weekly Schedule' : 'All Tasks';
-
   renderMainContent();
 }
 
@@ -85,19 +78,18 @@ function navigate(view) {
 function renderMainContent() {
   const content = document.getElementById('mainContent');
   content.innerHTML = '';
-
   if (currentView === 'dashboard') renderDashboard(content);
   else if (currentView === 'today') renderTaskView(content, true);
   else if (currentView === 'schedule') renderSchedule(content);
   else if (currentView === 'all') renderTaskView(content, false);
 }
 
-// ==================== DASHBOARD ====================
+// ==================== DASHBOARD, SCHEDULE, TASK VIEW, TASK CARD ====================
+// (I kept all your functions exactly as you had them)
 function renderDashboard(container) {
   const total = tasks.length;
   const completed = tasks.filter(t => t.completed).length;
   const progress = total ? Math.round((completed / total) * 100) : 0;
-
   container.innerHTML = `
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
       <div class="bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm">
@@ -120,7 +112,6 @@ function renderDashboard(container) {
         </div>
       </div>
     </div>
-
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-semibold">Recent Tasks</h2>
       <button onclick="showAddModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-medium">
@@ -129,23 +120,18 @@ function renderDashboard(container) {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="recentTasks"></div>
   `;
-
   const recentContainer = document.getElementById('recentTasks');
   tasks.slice(0, 6).forEach(task => renderTaskCard(task, recentContainer));
 }
 
-// (The rest of the functions - renderSchedule, renderTaskView, renderTaskCard, modal functions, etc. are the same as before)
-
 function renderSchedule(container) {
   const today = new Date();
   let html = `<h2 class="text-2xl font-semibold mb-6">Weekly Schedule</h2><div class="grid grid-cols-7 gap-4">`;
-
   for (let i = 0; i < 7; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
     const dateStr = date.toISOString().split('T')[0];
     const dayTasks = tasks.filter(t => t.deadline === dateStr);
-
     html += `
       <div class="bg-white dark:bg-gray-900 rounded-3xl p-5">
         <p class="font-medium text-center">${date.toLocaleDateString('en-US', {weekday:'short'})}</p>
@@ -168,10 +154,9 @@ function renderTaskView(container, todayOnly) {
     const today = new Date().toISOString().split('T')[0];
     filteredTasks = tasks.filter(t => t.deadline === today);
   }
-
   container.innerHTML = `
     <div class="flex flex-wrap gap-4 mb-8">
-      <input id="searchInput" onkeyup="handleSearch()" type="text" placeholder="Search tasks..." 
+      <input id="searchInput" onkeyup="handleSearch()" type="text" placeholder="Search tasks..."
              class="flex-1 px-5 py-3 rounded-2xl border dark:border-gray-700 focus:border-indigo-500 outline-none">
       <select onchange="handleFilter(this.value)" class="px-5 py-3 rounded-2xl border dark:border-gray-700 focus:border-indigo-500 outline-none">
         <option value="all">All Tasks</option>
@@ -186,7 +171,6 @@ function renderTaskView(container, todayOnly) {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="taskGrid"></div>
   `;
-
   const grid = document.getElementById('taskGrid');
   filteredTasks.forEach(task => renderTaskCard(task, grid));
 }
@@ -194,11 +178,9 @@ function renderTaskView(container, todayOnly) {
 function renderTaskCard(task, container) {
   const todayStr = new Date().toISOString().split('T')[0];
   const isOverdue = !task.completed && task.deadline < todayStr;
-
   const card = document.createElement('div');
-  card.className = `task-card bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border-l-4 
+  card.className = `task-card bg-white dark:bg-gray-900 p-6 rounded-3xl shadow-sm border-l-4
     ${isOverdue ? 'border-red-500' : task.priority === 'High' ? 'border-red-500' : task.priority === 'Medium' ? 'border-orange-500' : 'border-green-500'}`;
-
   card.innerHTML = `
     <div class="flex justify-between items-start">
       <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800">${task.category}</span>
@@ -219,8 +201,8 @@ function renderTaskCard(task, container) {
   container.appendChild(card);
 }
 
-// Modal, Save, Edit, Toggle, Delete functions (same as before)
-function showAddModal() { /* same as previous */ 
+// Modal Functions
+function showAddModal() {
   currentEditId = null;
   document.getElementById('modalTitle').textContent = 'Add New Task';
   document.getElementById('taskTitle').value = '';
@@ -234,30 +216,27 @@ function closeModal() {
   document.getElementById('taskModal').classList.add('hidden');
 }
 
-function saveTask() { /* same logic as before */ 
+function saveTask() {
   const title = document.getElementById('taskTitle').value.trim();
   const deadline = document.getElementById('taskDeadline').value;
   const priority = document.getElementById('taskPriority').value;
   const category = document.getElementById('taskCategory').value;
-
   if (!title || !deadline) {
     alert("Title and Deadline are required!");
     return;
   }
-
   if (currentEditId) {
     const task = tasks.find(t => t.id === currentEditId);
     if (task) Object.assign(task, {title, deadline, priority, category});
   } else {
     tasks.push({ id: Date.now(), title, deadline, priority, category, completed: false });
   }
-
   localStorage.setItem('studyplan_tasks', JSON.stringify(tasks));
   closeModal();
   renderMainContent();
 }
 
-function editTask(id) { /* same */ 
+function editTask(id) {
   const task = tasks.find(t => t.id === id);
   if (!task) return;
   currentEditId = id;
@@ -296,6 +275,12 @@ function toggleDarkMode() {
 function updateStreak() {
   const streakEl = document.getElementById('streak');
   if (streakEl) streakEl.textContent = "9 days 🔥";
+}
+
+// ==================== MOBILE SIDEBAR TOGGLE ====================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('-translate-x-full');
 }
 
 // ==================== INITIALIZE ====================
