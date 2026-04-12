@@ -7,6 +7,10 @@ body {
 }
 
 /* ====================== AUTH PAGE ====================== */
+#authPage {
+  padding: 16px;
+}
+
 #authPage .border-b-2 {
   border-color: #4f46e5;
 }
@@ -88,4 +92,66 @@ input:focus, select:focus {
 /* Auth Page Dark Mode */
 .dark #authPage .bg-white {
   background-color: #1f2937 !important;
+}
+
+/* ====================== RESPONSIVENESS ====================== */
+main {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  main {
+    padding: 2rem;
+  }
+}
+
+/* Sidebar on mobile */
+#sidebar {
+  transition: transform 0.4s ease;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    width: 280px;
+  }
+}
+
+/* Header */
+header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  header {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Task Grid */
+#recentTasks, #taskGrid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Smaller text on mobile */
+.text-5xl {
+  font-size: 2.25rem;
+}
+
+@media (max-width: 640px) {
+  .text-5xl {
+    font-size: 1.9rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+  }
+}
+
+/* Modal responsiveness */
+#taskModal > div {
+  margin: 16px;
+  max-height: 92vh;
+  overflow-y: auto;
 }
