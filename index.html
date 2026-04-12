@@ -11,28 +11,28 @@
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
   <!-- Auth Page (Login + Register) -->
-  <div id="authPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
-    <div class="bg-white dark:bg-gray-900 p-10 rounded-3xl shadow-2xl w-full max-w-md">
+  <div id="authPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4">
+    <div class="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-md">
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-indigo-600">📚 StudyPlan</h1>
         <p class="text-gray-600 dark:text-gray-400 mt-2">Smart Digital Study Planner</p>
       </div>
-
+      
       <!-- Tab Toggle -->
       <div class="flex mb-8 border-b border-gray-200 dark:border-gray-700">
-        <button onclick="showLogin()" id="loginTab" 
+        <button onclick="showLogin()" id="loginTab"
                 class="flex-1 py-3 font-medium border-b-2 border-indigo-600 text-indigo-600">Login</button>
-        <button onclick="showRegister()" id="registerTab" 
+        <button onclick="showRegister()" id="registerTab"
                 class="flex-1 py-3 font-medium text-gray-500 dark:text-gray-400">Register</button>
       </div>
 
       <!-- Login Form -->
       <div id="loginForm">
-        <input id="loginEmail" type="email" value="justice@student.edu.ng" 
+        <input id="loginEmail" type="email" value="justice@student.edu.ng"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Email"/>
-        <input id="loginPassword" type="password" value="123456" 
+        <input id="loginPassword" type="password" value="123456"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-6" placeholder="Password"/>
-        <button onclick="login()" 
+        <button onclick="login()"
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
           Login
         </button>
@@ -40,13 +40,13 @@
 
       <!-- Register Form -->
       <div id="registerForm" class="hidden">
-        <input id="regFullName" type="text" 
+        <input id="regFullName" type="text"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Full Name"/>
-        <input id="regEmail" type="email" 
+        <input id="regEmail" type="email"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Email"/>
-        <input id="regPassword" type="password" 
+        <input id="regPassword" type="password"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-6" placeholder="Create Password"/>
-        <button onclick="registerUser()" 
+        <button onclick="registerUser()"
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
           Create Account
         </button>
@@ -59,13 +59,14 @@
   </div>
 
   <!-- Main App -->
-  <div id="mainApp" class="hidden flex h-screen">
+  <div id="mainApp" class="hidden flex h-screen flex-col md:flex-row">
+
     <!-- Sidebar -->
-    <div class="w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+    <div id="sidebar" class="w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col fixed md:static h-full z-50 -translate-x-full md:translate-x-0 transition-transform duration-300">
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <h1 class="text-3xl font-bold text-indigo-600">📚 StudyPlan</h1>
       </div>
-      
+     
       <nav class="flex-1 p-4">
         <ul class="space-y-1">
           <li><a onclick="navigate('dashboard')" id="nav-dashboard" class="nav-link active flex items-center gap-3 px-5 py-3 rounded-2xl"> <i class="fas fa-home"></i> Dashboard</a></li>
@@ -85,8 +86,13 @@
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col">
-      <header class="h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-8 flex items-center justify-between">
-        <h2 id="pageTitle" class="text-2xl font-semibold">Dashboard</h2>
+      <header class="h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 md:px-8 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleSidebar()" class="md:hidden text-3xl text-gray-700 dark:text-gray-300 p-2">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h2 id="pageTitle" class="text-xl md:text-2xl font-semibold">Dashboard</h2>
+        </div>
         <div class="flex items-center gap-4">
           <button onclick="toggleDarkMode()" class="p-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800">
             <i class="fas fa-moon text-xl dark:hidden"></i>
@@ -98,19 +104,18 @@
           </div>
         </div>
       </header>
-
-      <main class="flex-1 p-8 overflow-auto" id="mainContent"></main>
+      <main class="flex-1 p-4 md:p-8 overflow-auto" id="mainContent"></main>
     </div>
   </div>
 
   <!-- Task Modal -->
-  <div id="taskModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-lg p-8">
+  <div id="taskModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-lg p-6 md:p-8">
       <h3 id="modalTitle" class="text-2xl font-semibold mb-6">Add New Task</h3>
-      
+     
       <div class="space-y-5">
         <input id="taskTitle" type="text" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700" placeholder="Task title">
-        
+       
         <div class="grid grid-cols-2 gap-5">
           <div>
             <label class="block text-sm font-medium mb-1">Deadline</label>
@@ -125,7 +130,6 @@
             </select>
           </div>
         </div>
-
         <div>
           <label class="block text-sm font-medium mb-1">Category</label>
           <select id="taskCategory" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700">
@@ -138,7 +142,6 @@
           </select>
         </div>
       </div>
-
       <div class="flex gap-4 mt-8">
         <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl border dark:border-gray-700">Cancel</button>
         <button onclick="saveTask()" class="flex-1 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700">Save Task</button>
