@@ -7,150 +7,124 @@ body {
 }
 
 /* ====================== AUTH PAGE ====================== */
-#authPage {
-  padding: 16px;
-}
+#authPage { padding: 16px; }
+#authPage .border-b-2 { border-color: #4f46e5; }
 
-#authPage .border-b-2 {
-  border-color: #4f46e5;
-}
-
-input, select {
-  transition: all 0.2s ease;
-}
-
-input:focus, select:focus {
+input, select, textarea { transition: all 0.2s ease; }
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 /* ====================== NAVIGATION ====================== */
-.nav-link {
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-  background-color: #f3f4f6;
-}
-
-.dark .nav-link:hover {
-  background-color: #374151;
-}
-
-.nav-link.active {
-  background-color: #4f46e5 !important;
-  color: white !important;
-  font-weight: 600;
-}
+.nav-link { transition: all 0.3s ease; cursor: pointer; }
+.nav-link:hover { background-color: #f3f4f6; }
+.dark .nav-link:hover { background-color: #374151; }
+.nav-link.active { background-color: #4f46e5 !important; color: white !important; font-weight: 600; }
 
 /* ====================== TASK CARDS ====================== */
-.task-card {
-  transition: all 0.3s ease;
-}
-
+.task-card { transition: all 0.3s ease; }
 .task-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
+.overdue { border-left: 6px solid #dc2626 !important; }
+.completed { opacity: 0.75; text-decoration: line-through; }
 
-/* Overdue */
-.overdue {
-  border-left: 6px solid #dc2626 !important;
+/* ====================== COURSE CARDS ====================== */
+.course-card { transition: all 0.3s ease; }
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+.course-indigo  { background-color: #6366f1; }
+.course-purple  { background-color: #a855f7; }
+.course-blue    { background-color: #3b82f6; }
+.course-green   { background-color: #22c55e; }
+.course-orange  { background-color: #f97316; }
+.course-red     { background-color: #ef4444; }
+.course-pink    { background-color: #ec4899; }
+.course-teal    { background-color: #14b8a6; }
+
+.colour-btn { transition: transform 0.2s ease; }
+.colour-btn:hover { transform: scale(1.15); }
+.colour-btn.selected { transform: scale(1.15); outline: 3px solid #4f46e5; outline-offset: 2px; }
+
+/* ====================== POMODORO TIMER ====================== */
+.pomodoro-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
 }
 
-.completed {
-  opacity: 0.75;
-  text-decoration: line-through;
+.pomodoro-ring circle {
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-mode-btn {
+  transition: all 0.2s ease;
+}
+
+.timer-mode-btn.active {
+  background-color: #4f46e5;
+  color: white;
+}
+
+/* Pulse animation when timer is running */
+@keyframes timerPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.3); }
+  50%       { box-shadow: 0 0 0 20px rgba(79, 70, 229, 0); }
+}
+
+.timer-running {
+  animation: timerPulse 2s ease-in-out infinite;
+}
+
+/* Session dots */
+.session-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
+}
+
+.session-dot.done {
+  background-color: #4f46e5;
 }
 
 /* ====================== MODAL ====================== */
-#taskModal {
-  animation: fadeInModal 0.3s ease forwards;
-}
-
+#taskModal, #courseModal { animation: fadeInModal 0.3s ease forwards; }
 @keyframes fadeInModal {
   from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-/* ====================== DARK MODE IMPROVEMENTS ====================== */
-.dark .bg-white {
-  background-color: #1f2937 !important;
-}
-
-.dark .shadow-sm {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
-}
-
-.dark input, .dark select {
-  background-color: #374151;
-  color: #e5e7eb;
-  border-color: #4b5563;
-}
-
-/* Auth Page Dark Mode */
-.dark #authPage .bg-white {
-  background-color: #1f2937 !important;
-}
+/* ====================== DARK MODE ====================== */
+.dark .bg-white { background-color: #1f2937 !important; }
+.dark .shadow-sm { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important; }
+.dark input, .dark select, .dark textarea { background-color: #374151; color: #e5e7eb; border-color: #4b5563; }
+.dark #authPage .bg-white { background-color: #1f2937 !important; }
 
 /* ====================== RESPONSIVENESS ====================== */
-main {
-  padding: 1rem;
-}
+main { padding: 1rem; }
+@media (min-width: 768px) { main { padding: 2rem; } }
 
-@media (min-width: 768px) {
-  main {
-    padding: 2rem;
-  }
-}
+#sidebar { transition: transform 0.4s ease; box-shadow: 4px 0 15px rgba(0,0,0,0.15); }
+@media (max-width: 768px) { #sidebar { width: 280px; } }
 
-/* Sidebar on mobile */
-#sidebar {
-  transition: transform 0.4s ease;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
-}
+header { padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 768px) { header { padding-left: 2rem; padding-right: 2rem; } }
 
-@media (max-width: 768px) {
-  #sidebar {
-    width: 280px;
-  }
-}
+#recentTasks, #taskGrid, #courseGrid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 
-/* Header */
-header {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 768px) {
-  header {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* Task Grid */
-#recentTasks, #taskGrid {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-/* Smaller text on mobile */
-.text-5xl {
-  font-size: 2.25rem;
-}
-
+.text-5xl { font-size: 2.25rem; }
 @media (max-width: 640px) {
-  .text-5xl {
-    font-size: 1.9rem;
-  }
-  h2 {
-    font-size: 1.35rem;
-  }
+  .text-5xl { font-size: 1.9rem; }
+  h2 { font-size: 1.35rem; }
 }
 
-/* Modal responsiveness */
-#taskModal > div {
+#taskModal > div, #courseModal > div {
   margin: 16px;
   max-height: 92vh;
   overflow-y: auto;
