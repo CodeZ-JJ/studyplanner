@@ -10,35 +10,24 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
-  <!-- Auth Page (Login + Register) -->
+  <!-- Auth Page -->
   <div id="authPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4">
     <div class="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-md">
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-indigo-600">📚 StudyPlan</h1>
         <p class="text-gray-600 dark:text-gray-400 mt-2">Smart Digital Study Planner</p>
       </div>
-      
-      <!-- Tab Toggle -->
       <div class="flex mb-8 border-b border-gray-200 dark:border-gray-700">
-        <button onclick="showLogin()" id="loginTab"
-                class="flex-1 py-3 font-medium border-b-2 border-indigo-600 text-indigo-600">Login</button>
-        <button onclick="showRegister()" id="registerTab"
-                class="flex-1 py-3 font-medium text-gray-500 dark:text-gray-400">Register</button>
+        <button onclick="showLogin()" id="loginTab" class="flex-1 py-3 font-medium border-b-2 border-indigo-600 text-indigo-600">Login</button>
+        <button onclick="showRegister()" id="registerTab" class="flex-1 py-3 font-medium text-gray-500 dark:text-gray-400">Register</button>
       </div>
-
-      <!-- Login Form -->
       <div id="loginForm">
         <input id="loginEmail" type="email" value="justice@student.edu.ng"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Email"/>
         <input id="loginPassword" type="password" value="123456"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-6" placeholder="Password"/>
-        <button onclick="login()"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
-          Login
-        </button>
+        <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">Login</button>
       </div>
-
-      <!-- Register Form -->
       <div id="registerForm" class="hidden">
         <input id="regFullName" type="text"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Full Name"/>
@@ -46,15 +35,9 @@
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-4" placeholder="Email"/>
         <input id="regPassword" type="password"
                class="w-full px-5 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 focus:border-indigo-500 mb-6" placeholder="Create Password"/>
-        <button onclick="registerUser()"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">
-          Create Account
-        </button>
+        <button onclick="registerUser()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-semibold text-lg transition">Create Account</button>
       </div>
-
-      <p class="text-center text-sm text-gray-500 mt-6" id="demoText">
-        Demo: justice@student.edu.ng / 123456
-      </p>
+      <p class="text-center text-sm text-gray-500 mt-6">Demo: justice@student.edu.ng / 123456</p>
     </div>
   </div>
 
@@ -66,21 +49,26 @@
       <div class="p-6 border-b border-gray-200 dark:border-gray-700">
         <h1 class="text-3xl font-bold text-indigo-600">📚 StudyPlan</h1>
       </div>
-     
       <nav class="flex-1 p-4">
         <ul class="space-y-1">
-          <li><a onclick="navigate('dashboard')" id="nav-dashboard" class="nav-link active flex items-center gap-3 px-5 py-3 rounded-2xl"> <i class="fas fa-home"></i> Dashboard</a></li>
-          <li><a onclick="navigate('today')" id="nav-today" class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl"> <i class="fas fa-calendar-day"></i> Today's Tasks</a></li>
-          <li><a onclick="navigate('schedule')" id="nav-schedule" class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl"> <i class="fas fa-calendar-week"></i> Weekly Schedule</a></li>
-          <li><a onclick="navigate('all')" id="nav-all" class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl"> <i class="fas fa-tasks"></i> All Tasks</a></li>
+          <li><a onclick="navigate('dashboard')"  id="nav-dashboard"  class="nav-link active flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a onclick="navigate('today')"      id="nav-today"      class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-calendar-day"></i> Today's Tasks</a></li>
+          <li><a onclick="navigate('schedule')"   id="nav-schedule"   class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-calendar-week"></i> Weekly Schedule</a></li>
+          <li><a onclick="navigate('all')"        id="nav-all"        class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-tasks"></i> All Tasks</a></li>
+          <li><a onclick="navigate('courses')"    id="nav-courses"    class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-book-open"></i> Courses</a></li>
+          <li><a onclick="navigate('pomodoro')"   id="nav-pomodoro"   class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-clock"></i> Pomodoro Timer</a></li>
+          <li><a onclick="navigate('analytics')"  id="nav-analytics"  class="nav-link flex items-center gap-3 px-5 py-3 rounded-2xl cursor-pointer"><i class="fas fa-chart-bar"></i> Analytics</a></li>
         </ul>
       </nav>
-
-      <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+      <div class="p-6 border-t border-gray-200 dark:border-gray-700 space-y-3">
         <div class="bg-indigo-50 dark:bg-indigo-950 rounded-2xl p-5 text-center">
           <p class="text-sm text-indigo-600 dark:text-indigo-400">Current Streak</p>
-          <p id="streak" class="text-4xl font-bold text-indigo-600">9 days 🔥</p>
+          <p id="streak" class="text-4xl font-bold text-indigo-600">0 days</p>
         </div>
+        <button id="logoutBtn" onclick="logout()"
+                class="hidden w-full flex items-center justify-center gap-2 py-3 px-5 rounded-2xl text-red-500 border border-red-200 hover:bg-red-50 dark:hover:bg-red-950 transition text-sm font-medium">
+          <i class="fas fa-sign-out-alt"></i> Log Out
+        </button>
       </div>
     </div>
 
@@ -88,9 +76,7 @@
     <div class="flex-1 flex flex-col">
       <header class="h-16 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 md:px-8 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <button onclick="toggleSidebar()" class="md:hidden text-3xl text-gray-700 dark:text-gray-300 p-2">
-            <i class="fas fa-bars"></i>
-          </button>
+          <button onclick="toggleSidebar()" class="md:hidden text-3xl text-gray-700 dark:text-gray-300 p-2"><i class="fas fa-bars"></i></button>
           <h2 id="pageTitle" class="text-xl md:text-2xl font-semibold">Dashboard</h2>
         </div>
         <div class="flex items-center gap-4">
@@ -112,10 +98,12 @@
   <div id="taskModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
     <div class="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-lg p-6 md:p-8">
       <h3 id="modalTitle" class="text-2xl font-semibold mb-6">Add New Task</h3>
-     
       <div class="space-y-5">
         <input id="taskTitle" type="text" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700" placeholder="Task title">
-       
+        <div>
+          <label class="block text-sm font-medium mb-1">Course</label>
+          <select id="taskCourse" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700"><option value="">-- No Course --</option></select>
+        </div>
         <div class="grid grid-cols-2 gap-5">
           <div>
             <label class="block text-sm font-medium mb-1">Deadline</label>
@@ -141,10 +129,52 @@
             <option value="Other">Other</option>
           </select>
         </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Description (optional)</label>
+          <textarea id="taskDescription" rows="2" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700 resize-none" placeholder="Add more details..."></textarea>
+        </div>
       </div>
       <div class="flex gap-4 mt-8">
         <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl border dark:border-gray-700">Cancel</button>
         <button onclick="saveTask()" class="flex-1 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Modal -->
+  <div id="courseModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-md p-6 md:p-8">
+      <h3 id="courseModalTitle" class="text-2xl font-semibold mb-6">Add Course</h3>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium mb-1">Course Code</label>
+          <input id="courseCode" type="text" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700" placeholder="e.g. INS 204">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Course Name</label>
+          <input id="courseName" type="text" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700" placeholder="e.g. Systems Analysis and Design">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Lecturer</label>
+          <input id="courseLecturer" type="text" class="w-full px-5 py-4 rounded-2xl border dark:border-gray-700" placeholder="e.g. Miss Hauwa Ibrahim Aminu">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Colour</label>
+          <div class="flex gap-3 flex-wrap">
+            <button type="button" onclick="selectColour('indigo')"  class="colour-btn w-9 h-9 rounded-full bg-indigo-500 selected"></button>
+            <button type="button" onclick="selectColour('purple')"  class="colour-btn w-9 h-9 rounded-full bg-purple-500"></button>
+            <button type="button" onclick="selectColour('blue')"    class="colour-btn w-9 h-9 rounded-full bg-blue-500"></button>
+            <button type="button" onclick="selectColour('green')"   class="colour-btn w-9 h-9 rounded-full bg-green-500"></button>
+            <button type="button" onclick="selectColour('orange')"  class="colour-btn w-9 h-9 rounded-full bg-orange-500"></button>
+            <button type="button" onclick="selectColour('red')"     class="colour-btn w-9 h-9 rounded-full bg-red-500"></button>
+            <button type="button" onclick="selectColour('pink')"    class="colour-btn w-9 h-9 rounded-full bg-pink-500"></button>
+            <button type="button" onclick="selectColour('teal')"    class="colour-btn w-9 h-9 rounded-full bg-teal-500"></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-4 mt-8">
+        <button onclick="closeCourseModal()" class="flex-1 py-4 rounded-2xl border dark:border-gray-700">Cancel</button>
+        <button onclick="saveCourse()" class="flex-1 py-4 rounded-2xl bg-indigo-600 text-white hover:bg-indigo-700">Save Course</button>
       </div>
     </div>
   </div>
